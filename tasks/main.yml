@@ -1,0 +1,21 @@
+---
+- name: create user on remote host
+  user:
+    name: '{{user_name}}'
+    state: '{{user_state}}'
+    remove: yes
+    shell: /bin/bash
+    append: yes
+
+- name: get user home directory
+  shell: "getent passwd {{user_name}} | awk -F: '{print $6}'"
+  register: user_home_result
+
+- set_fact: user_home={{ user_home_result.stdout }}
+
+- name: Add bashrc to include host and user
+  template:
+     dest: '~{{user_name}}/.bashrc'
+     src: templates/bashrc.j2
+  when: user_home != ''  
+  

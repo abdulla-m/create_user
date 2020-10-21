@@ -1,0 +1,6 @@
+---
+# defaults file for create-user
+user_name= default_user
+
+# user state
+user_state= present
